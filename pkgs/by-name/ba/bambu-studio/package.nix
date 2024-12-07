@@ -41,6 +41,9 @@
   withSystemd ? stdenv.hostPlatform.isLinux,
 }:
 let
+  openvdb' = openvdb.override {
+      boost = boost180;
+  };
   wxGTK' =
     (wxGTK31.override {
       withCurl = true;
@@ -70,7 +73,6 @@ stdenv.mkDerivation rec {
     pkg-config
     wrapGAppsHook3
   ];
-
   buildInputs = [
     binutils
     boost180
@@ -99,7 +101,7 @@ stdenv.mkDerivation rec {
     mpfr
     nlopt
     opencascade-occt_7_6
-    openvdb
+    openvdb'
     pcre
     tbb_2021_11
     webkitgtk_4_0
@@ -107,6 +109,7 @@ stdenv.mkDerivation rec {
     xorg.libX11
     opencv
   ] ++ lib.optionals withSystemd [ systemd ] ++ checkInputs;
+
 
   patches = [
     # Fix for webkitgtk linking
